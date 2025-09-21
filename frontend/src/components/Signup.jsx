@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const [form, setForm] = useState({
+  const [user, setUser] = useState({
     fullName: "",
     username: "",
     password: "",
@@ -15,13 +15,12 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (form.password !== form.confirmPassword) {
+    if (user.password !== user.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
@@ -30,7 +29,7 @@ const Register = () => {
     try {
       const res = await axios.post(
         `http://localhost:5050/api/v1/user/register`,
-        form,
+        user,
         {
           headers: {
             "Content-Type": "application/json",
@@ -47,7 +46,7 @@ const Register = () => {
       console.log(error);
     }
 
-    setForm({
+    setUser({
       fullName: "",
       username: "",
       password: "",
@@ -69,7 +68,7 @@ const Register = () => {
             <input
               type="text"
               name="fullName"
-              value={form.fullName}
+              value={user.fullName}
               onChange={handleChange}
               placeholder="John Doe"
               required
@@ -82,7 +81,7 @@ const Register = () => {
             <input
               type="text"
               name="username"
-              value={form.username}
+              value={user.username}
               onChange={handleChange}
               placeholder="johndoe123"
               required
@@ -95,7 +94,7 @@ const Register = () => {
             <input
               type="password"
               name="password"
-              value={form.password}
+              value={user.password}
               onChange={handleChange}
               placeholder="********"
               required
@@ -108,7 +107,7 @@ const Register = () => {
             <input
               type="password"
               name="confirmPassword"
-              value={form.confirmPassword}
+              value={user.confirmPassword}
               onChange={handleChange}
               placeholder="********"
               required
@@ -120,7 +119,7 @@ const Register = () => {
             <label className="block text-white mb-1">Gender</label>
             <select
               name="gender"
-              value={form.gender}
+              value={user.gender}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-400 outline-none"

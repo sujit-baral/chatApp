@@ -2,17 +2,20 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "../redux/userSlice";
 
 const Login = () => {
-  const [form, setForm] = useState({
+  const [user, setUser] = useState({
     username: "",
     password: "",
   });
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -22,7 +25,7 @@ const Login = () => {
     try {
       const res = await axios.post(
         `http://localhost:5050/api/v1/user/login`,
-        form,
+        user,
         {
           headers: {
             "Content-Type": "application/json",
@@ -31,7 +34,8 @@ const Login = () => {
         }
       );
       navigate("/");
-      console.log(res);
+      toast.success("Logged in successfully");
+      dispatch(setAuthUser(res.data));
     } catch (error) {
       toast.error(error.response.data.message);
       console.log(error);
@@ -50,7 +54,7 @@ const Login = () => {
             <input
               type="text"
               name="username"
-              value={form.username}
+              value={user.username}
               onChange={handleChange}
               placeholder="Enter your username"
               required
@@ -62,7 +66,7 @@ const Login = () => {
             <input
               type="password"
               name="password"
-              value={form.password}
+              value={user.password}
               onChange={handleChange}
               placeholder="********"
               required
